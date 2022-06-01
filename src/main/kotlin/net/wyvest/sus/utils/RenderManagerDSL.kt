@@ -114,6 +114,7 @@ fun Long.drawCircle(x: Number, y: Number, radius: Number, color: Int) =
     RenderManager.drawCircle(this, x.toFloat(), y.toFloat(), radius.toFloat(), color)
 
 fun VG.drawCircle(x: Number, y: Number, radius: Number, color: Int) = instance.drawCircle(x, y, radius, color)
+fun VG.drawCircleLeft(x: Number, y: Number, radius: Number, color: Int) = instance.drawCircle(x.toFloat() - radius.toFloat(), y.toFloat() - radius.toFloat(), radius, color)
 
 
 fun Long.drawText(text: String, x: Number, y: Number, color: Int, size: Number, font: Font) =

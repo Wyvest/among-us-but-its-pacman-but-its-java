@@ -1,6 +1,6 @@
 package net.wyvest.sus
 
-import net.wyvest.sus.utils.drawRect
+import cc.polyfrost.oneconfig.lwjgl.font.FontManager
 import net.wyvest.sus.utils.nanoVG
 import org.lwjgl.glfw.Callbacks.glfwFreeCallbacks
 import org.lwjgl.glfw.GLFW.*
@@ -12,12 +12,9 @@ import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.system.MemoryStack.stackPush
 import org.lwjgl.system.Platform
-import java.awt.Color
 import kotlin.math.max
+import kotlin.system.exitProcess
 
-
-var blowup = false
-var screenshot = false
 
 var cursorX = 0.0
 var cursorY = 0.0
@@ -27,6 +24,12 @@ var framebufferHeight = 0
 
 var contentScaleX = 0f
 var contentScaleY = 0f
+
+val width
+get() = (framebufferWidth / contentScaleX).toInt()
+
+val height
+get() = (framebufferHeight / contentScaleY).toInt()
 
 fun main() {
     GLFWErrorCallback.createPrint().set()
@@ -55,20 +58,20 @@ fun main() {
     glfwSetKeyCallback(
         window
     ) { windowHandle: Long, keyCode: Int, scancode: Int, action: Int, mods: Int ->
-        if (keyCode == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-            glfwSetWindowShouldClose(windowHandle, true)
-        }
+        /*
         if (keyCode == GLFW_KEY_SPACE && action == GLFW_PRESS) {
             blowup = !blowup
         }
         if (keyCode == GLFW_KEY_S && action == GLFW_PRESS) {
             screenshot = true
         }
+
+         */
     }
 
     glfwSetCursorPosCallback(window) { handle: Long, xpos: Double, ypos: Double ->
-        cursorX = xpos.toInt().toDouble()
-        cursorY = ypos.toInt().toDouble()
+        cursorX = xpos
+        cursorY = ypos
     }
 
     glfwSetFramebufferSizeCallback(window) { handle: Long, w: Int, h: Int ->
@@ -104,18 +107,17 @@ fun main() {
 
     glfwSetTime(0.0)
 
+    FontManager.INSTANCE.initialize(vg)
+
     while (!glfwWindowShouldClose(window)) {
         // Effective dimensions on hi-dpi devices.
-        val width = (framebufferWidth / contentScaleX).toInt()
-        val height = (framebufferHeight / contentScaleY).toInt()
-
         // Update and render
         glViewport(0, 0, framebufferWidth, framebufferHeight)
         glClearColor(1f, 1f, 1f, 1.0f)
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT)
         nvgBeginFrame(vg, width.toFloat(), height.toFloat(), max(contentScaleX, contentScaleY))
         nanoVG(vg) {
-            ScreenManager.render(this, width, height)
+            ScreenManager.render(this)
         }
         nvgEndFrame(vg)
 
@@ -130,4 +132,5 @@ fun main() {
     glfwFreeCallbacks(window)
     glfwTerminate()
     glfwSetErrorCallback(null)?.free()
+    exitProcess(0)
 }
