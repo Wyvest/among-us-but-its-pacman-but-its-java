@@ -466,6 +466,10 @@ public final class RenderManager {
         nvgScale(vg, x, y);
     }
 
+    public static void translate(long vg, float x, float y) {
+        nvgTranslate(vg, x, y);
+    }
+
     /**
      * Sets the global alpha value to render with.
      *

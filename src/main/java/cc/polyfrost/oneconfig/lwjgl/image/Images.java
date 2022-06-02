@@ -7,9 +7,9 @@ package cc.polyfrost.oneconfig.lwjgl.image;
  * @see ImageLoader
  */
 public enum Images {
-    HUE_GRADIENT("/assets/oneconfig/options/HueGradient.png"),
-    COLOR_WHEEL("/assets/oneconfig/options/ColorWheel.png"),
-    ALPHA_GRID("/assets/oneconfig/options/AlphaGrid.png");
+    PACMAN_CLOSED("/assets/oneconfig/sprites/pacman_closed.png"),
+    PACMAN_OPEN("/assets/oneconfig/sprites/pacman_open.png"),
+    HELTER_SKELTER("/assets/oneconfig/sprites/HELTER_SKELTER.png"); // 9
 
     public final String filePath;
 

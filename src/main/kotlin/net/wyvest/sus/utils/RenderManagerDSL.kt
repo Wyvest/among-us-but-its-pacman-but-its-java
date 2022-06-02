@@ -207,6 +207,9 @@ fun NVGColor.fill(r: Float, g: Float, b: Float, a: Float) = RenderManager.fillNV
 fun Long.scale(x: Float, y: Float) = RenderManager.scale(this, x, y)
 fun VG.scale(x: Float, y: Float) = instance.scale(x, y)
 
+fun Long.translate(x: Float, y: Float) = RenderManager.translate(this, x, y)
+fun VG.translate(x: Float, y: Float) = instance.translate(x, y)
+
 
 fun Long.setAlpha(alpha: Float) = RenderManager.setAlpha(this, alpha)
 fun VG.setAlpha(alpha: Float) = instance.setAlpha(alpha)

@@ -24,6 +24,7 @@ val lwjglNatives = Pair(
 
 repositories {
 	mavenCentral()
+	maven("https://jitpack.io/")
 }
 
 val shade by configurations.creating {
@@ -37,29 +38,42 @@ val runtimeOnlyShade by configurations.creating {
 dependencies {
 	implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
 
+	shade(kotlin("stdlib", "1.6.21"))
+	shade(kotlin("stdlib-jdk8", "1.6.21"))
+	shade(kotlin("stdlib-jdk7", "1.6.21"))
+
 	shade("commons-io:commons-io:2.11.0")
 	shade("org.lwjgl", "lwjgl", lwjglVersion)
 	shade("org.lwjgl", "lwjgl-glfw", lwjglVersion)
 	shade("org.lwjgl", "lwjgl-nanovg", lwjglVersion)
 	shade("org.lwjgl", "lwjgl-opengl", lwjglVersion)
+	shade("org.lwjgl", "lwjgl-openal", lwjglVersion)
 	shade("org.lwjgl", "lwjgl-opus", lwjglVersion)
 	shade("org.lwjgl", "lwjgl-stb", lwjglVersion)
+	shade("com.github.KevinPriv:keventbus:c52e0a2ea0") {
+		isTransitive = false
+	}
 	runtimeOnlyShade("org.lwjgl", "lwjgl", lwjglVersion, classifier = lwjglNatives)
 	runtimeOnlyShade("org.lwjgl", "lwjgl-glfw", lwjglVersion, classifier = lwjglNatives)
 	runtimeOnlyShade("org.lwjgl", "lwjgl-nanovg", lwjglVersion, classifier = lwjglNatives)
 	runtimeOnlyShade("org.lwjgl", "lwjgl-opengl", lwjglVersion, classifier = lwjglNatives)
+	runtimeOnlyShade("org.lwjgl", "lwjgl-openal", lwjglVersion, classifier = lwjglNatives)
 	runtimeOnlyShade("org.lwjgl", "lwjgl-opus", lwjglVersion, classifier = lwjglNatives)
 	runtimeOnlyShade("org.lwjgl", "lwjgl-stb", lwjglVersion, classifier = lwjglNatives)
 }
 
 tasks {
-	jar {
+	withType(Jar::class.java) {
 		manifest {
-			"MainClass" to "MainKt"
+			"Main-Class" to "MainKt"
 		}
-		enabled = false
 	}
+	jar.get().enabled = false
 	shadowJar {
+		manifest {
+			"Main-Class" to "MainKt"
+		}
+		archiveClassifier.set("")
 		configurations = listOf(shade, runtimeOnlyShade)
 	}
 	jar.get().dependsOn(shadowJar)
